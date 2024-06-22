@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Navbar from './Navbar';
-import BodySection from './interface'; // Adjust import as per your project structure
-import LoadingAnimation from './loadinganimation'; // Adjust import as per your project structure
-import Login from './loginpage'; // Import the Login component
+import ReactDOM from 'react-dom/client'; // Corrected import
+import './App.css';
+import Navbar from './components/Navbar/Navbar';
+import BodySection from './components/Home/home'; // Adjust import as per your project structure
+import LoadingAnimation from './components/Loading/loadinganimation'; // Adjust import as per your project structure
+import Login from './components/Login/login'; // Import the Login component
+import Register from './components/Register/register'; // Import the Register component
+import About from './components/About/about';
+import Contact from './components/Contact/contact';
+import Dashboard from './components/Dashboard/dashboard';
+import LandingPage from './components/Landingpage/Landingpage'; // Import the LandingPage component
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,19 +34,29 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      {isLoading ? (
-        <LoadingAnimation />
-      ) : isLoggedIn ? (
-        <>
-          <Navbar onLogout={handleLogout} /> {/* Pass handleLogout as prop */}
-          <BodySection />
-          {/* Add more authenticated components */}
-        </>
-      ) : (
-        <Login onLogin={handleLogin} />
-      )}
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        {isLoading ? (
+          <LoadingAnimation />
+        ) : isLoggedIn ? (
+          <>
+            <Navbar onLogout={handleLogout} /> {/* Pass handleLogout as prop */}
+            <Routes>
+              <Route path="/" element={<BodySection />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </>
+        ) : (
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        )}
+      </div>
+    </BrowserRouter>
   );
 };
 
